@@ -8,5 +8,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0] - 2019-06-07
 ### Initial release
-* 2-32 bit Galois LFSRs 
-* Macro to generate reverse lookup functions
+* An object-safe LFSR trait
+* A non-object-safe LFSRStatic trait for some static information about an LFSR
