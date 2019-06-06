@@ -1,0 +1,8 @@
+[workspace]
+members = [
+  "lfsr",
+  "base",
+  "macro-generate",
+  "macro-lookup",
+  "instances",
+]

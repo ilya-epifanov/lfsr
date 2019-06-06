@@ -1,0 +1,20 @@
+language: rust
+os: linux
+rust: stable
+dist: xenial
+
+sudo: true
+
+before_install:
+  - rustup component add clippy
+
+script:
+  - cargo clippy
+  - cargo build --all --release
+  - cargo test --all --release
+  - cargo check --all --release
+  - cargo doc --all --no-deps
+
+cache:
+  directories:
+    - ~/.cargo

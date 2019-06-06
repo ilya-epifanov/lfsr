@@ -1,0 +1,10 @@
+[package]
+name = "lfsr-base"
+version = "0.2.0"
+authors = ["Ilya Epifanov <elijah.epifanov@gmail.com>"]
+edition = "2018"
+keywords = ["embedded", "no-std", "math", "testing"]
+categories = ["embedded", "no-std"]
+description = "Linear feedback shift register base traits"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ilya-epifanov/lfsr"

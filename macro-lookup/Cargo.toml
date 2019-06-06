@@ -1,0 +1,21 @@
+[package]
+name = "lfsr-macro-lookup"
+version = "0.2.0"
+authors = ["Ilya Epifanov <elijah.epifanov@gmail.com>"]
+edition = "2018"
+keywords = ["embedded", "no-std", "math", "testing"]
+categories = ["embedded"]
+description = "Macro for generation of linear feedback shift registers reverse lookup functions"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ilya-epifanov/lfsr"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "0.4.30"
+syn = { version = "0.15.34", features = ["extra-traits", "full"] }
+quote = "0.6.12"
+itertools = "0.8.0"
+lfsr-base = { version = "0.2.0", path = "../base" }
+lfsr-instances = { version = "0.2.0", path = "../instances" }

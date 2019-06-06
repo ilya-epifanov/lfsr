@@ -1,0 +1,14 @@
+[package]
+name = "lfsr-instances"
+version = "0.2.0"
+authors = ["Ilya Epifanov <elijah.epifanov@gmail.com>"]
+edition = "2018"
+keywords = ["embedded", "no-std", "math", "testing"]
+categories = ["embedded", "no-std"]
+description = "Some Galois linear feedback shift registers with predefined parameters"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ilya-epifanov/lfsr"
+
+[dependencies]
+lfsr-base = { version = "0.2.0", path = "../base" }
+lfsr-macro-generate = { version = "0.2.0", path = "../macro-generate" }
