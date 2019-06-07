@@ -1,6 +1,6 @@
 #![no_std]
 
-//! ```
+//! ```rust
 //! use lfsr::lfsr_lookup;
 //! use lfsr::galois;
 //! use lfsr::LFSR;

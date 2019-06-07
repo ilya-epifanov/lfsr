@@ -1,7 +1,7 @@
 //!
 //! Maximum sequence length [Galois LFSRs](https://en.wikipedia.org/wiki/Linear-feedback_shift_register#Galois_LFSRs), up to 32 bits wide.
 //!
-//! Taps taken from [https://web.archive.org/web/20161007061934/http://courses.cse.tamu.edu/csce680/walker/lfsr_table.pdf]
+//! Taps taken from the [Table of Linear Feedback Shift Registers](http://courses.cse.tamu.edu/walker/csce680/lfsr_table.pdf) by Roy Ward, Tim Molteno
 //!
 
 use lfsr_base::LFSR;
