@@ -17,7 +17,7 @@ proc-macro2 = "0.4.30"
 syn = { version = "0.15.34", features = ["extra-traits", "full"] }
 quote = "0.6.12"
 itertools = "0.8.0"
-lfsr-base = { version = "0.2.0", path = "../base" }
+lfsr-base = { version = "^0.3.0", path = "../base" }
 
 [package.metadata.release]
 sign-commit = true

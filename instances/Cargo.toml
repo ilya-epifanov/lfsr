@@ -10,7 +10,7 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/ilya-epifanov/lfsr"
 
 [dependencies]
-lfsr-base = { version = "0.2.0", path = "../base" }
+lfsr-base = { version = "^0.3.0", path = "../base" }
 lfsr-macro-generate = { version = "0.2.0", path = "../macro-generate" }
 
 [package.metadata.release]
