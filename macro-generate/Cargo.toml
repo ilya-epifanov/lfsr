@@ -21,5 +21,4 @@ lfsr-base = { version = "0.2.0", path = "../base" }
 
 [package.metadata.release]
 sign-commit = true
-upload-doc = true
 pre-release-replacements = [ {file="CHANGELOG.md", search="Unreleased", replace="{{version}}"}, {file="CHANGELOG.md", search="ReleaseDate", replace="{{date}}"} ]
