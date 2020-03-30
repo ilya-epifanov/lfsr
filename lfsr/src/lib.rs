@@ -1,7 +1,7 @@
 #![no_std]
-
+#![allow(clippy::needless_doctest_main)]
 //! ```rust
-//! use lfsr::lfsr_lookup;
+//! use lfsr::{direct_lfsr_lookup, searching_lfsr_lookup};
 //! use lfsr::galois;
 //! use lfsr::LFSR;
 //!
@@ -9,56 +9,56 @@
 //! searching_lfsr_lookup!(galois32_lookup_big, galois::Galois32, 99_999_000, 100_001_000, 100);
 //! direct_lfsr_lookup!(galois16_direct_lookup, galois::Galois16);
 //!
-//! fn main() {
-//!     // Searching lookup
+//! # fn main() {
+//! // Searching lookup
 //!
-//!     let mut lfsr = galois::Galois32::default();
-//!     assert_eq!(galois32_lookup(&lfsr), None);
+//! let mut lfsr = galois::Galois32::default();
+//! assert_eq!(galois32_lookup(&lfsr), None);
 //!
-//!     for _ in 0..9 {
-//!         lfsr.inc();
-//!     }
-//!     assert_eq!(galois32_lookup(&lfsr), None);
-//!
-//!     for _ in 9..10 {
-//!         lfsr.inc();
-//!     }
-//!     assert_eq!(galois32_lookup(&lfsr), Some(10));
-//!
-//!     for _ in 10..17 {
-//!         lfsr.inc();
-//!     }
-//!     assert_eq!(galois32_lookup(&lfsr), Some(17));
-//!
-//!     for _ in 9..20 {
-//!         lfsr.inc();
-//!     }
-//!     assert_eq!(galois32_lookup(&lfsr), None);
-//!
-//!     // Direct lookup
-//!
-//!     let mut lfsr = galois::Galois16::default();
-//!     assert_eq!(galois16_direct_lookup(&lfsr), 0);
-//!
-//!     for _ in 0..10 {
-//!         lfsr.inc();
-//!     }
-//!     assert_eq!(galois16_direct_lookup(&lfsr), 10);
-//!
-//!     for _ in 10..11 {
-//!         lfsr.inc();
-//!     }
-//!     assert_eq!(galois16_direct_lookup(&lfsr), 11);
-//!
-//!     for _ in 11..65534 {
-//!         lfsr.inc();
-//!     }
-//!     assert_eq!(galois16_direct_lookup(&lfsr), 65534);
-//!
-//!     // wrap around
+//! for _ in 0..9 {
 //!     lfsr.inc();
-//!     assert_eq!(galois16_direct_lookup(&lfsr), 0);
 //! }
+//! assert_eq!(galois32_lookup(&lfsr), None);
+//!
+//! for _ in 9..10 {
+//!     lfsr.inc();
+//! }
+//! assert_eq!(galois32_lookup(&lfsr), Some(10));
+//!
+//! for _ in 10..17 {
+//!     lfsr.inc();
+//! }
+//! assert_eq!(galois32_lookup(&lfsr), Some(17));
+//!
+//! for _ in 9..20 {
+//!     lfsr.inc();
+//! }
+//! assert_eq!(galois32_lookup(&lfsr), None);
+//!
+//! // Direct lookup
+//!
+//! let mut lfsr = galois::Galois16::default();
+//! assert_eq!(galois16_direct_lookup(&lfsr), 0);
+//!
+//! for _ in 0..10 {
+//!     lfsr.inc();
+//! }
+//! assert_eq!(galois16_direct_lookup(&lfsr), 10);
+//!
+//! for _ in 10..11 {
+//!     lfsr.inc();
+//! }
+//! assert_eq!(galois16_direct_lookup(&lfsr), 11);
+//!
+//! for _ in 11..65534 {
+//!     lfsr.inc();
+//! }
+//! assert_eq!(galois16_direct_lookup(&lfsr), 65534);
+//!
+//! // wrap around
+//! lfsr.inc();
+//! assert_eq!(galois16_direct_lookup(&lfsr), 0);
+//! # }
 //! ```
 
 pub use lfsr_base::*;
