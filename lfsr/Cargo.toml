@@ -12,7 +12,7 @@ repository = "https://github.com/ilya-epifanov/lfsr"
 [dependencies]
 lfsr-base = { version = "^0.3.0", path = "../base" }
 lfsr-instances = { version = "0.2.0", path = "../instances" }
-lfsr-macro-generate = { version = "0.2.0", path = "../macro-generate" }
+lfsr-macro-generate = { version = "^0.3.0", path = "../macro-generate" }
 lfsr-macro-lookup = { version = "0.2.0", path = "../macro-lookup" }
 
 [package.metadata.release]
