@@ -5,10 +5,13 @@
 //! use lfsr::galois;
 //! use lfsr::LFSR;
 //!
-//! lfsr_lookup!(galois32_lookup, galois::Galois32, 10, 20, 5);
-//! lfsr_lookup!(galois32_lookup_big, galois::Galois32, 99_999_000, 100_001_000, 100);
+//! searching_lfsr_lookup!(galois32_lookup, galois::Galois32, 10, 20, 5);
+//! searching_lfsr_lookup!(galois32_lookup_big, galois::Galois32, 99_999_000, 100_001_000, 100);
+//! direct_lfsr_lookup!(galois16_direct_lookup, galois::Galois16);
 //!
 //! fn main() {
+//!     // Searching lookup
+//!
 //!     let mut lfsr = galois::Galois32::default();
 //!     assert_eq!(galois32_lookup(&lfsr), None);
 //!
@@ -31,19 +34,44 @@
 //!         lfsr.inc();
 //!     }
 //!     assert_eq!(galois32_lookup(&lfsr), None);
+//!
+//!     // Direct lookup
+//!
+//!     let mut lfsr = galois::Galois16::default();
+//!     assert_eq!(galois16_direct_lookup(&lfsr), 0);
+//!
+//!     for _ in 0..10 {
+//!         lfsr.inc();
+//!     }
+//!     assert_eq!(galois16_direct_lookup(&lfsr), 10);
+//!
+//!     for _ in 10..11 {
+//!         lfsr.inc();
+//!     }
+//!     assert_eq!(galois16_direct_lookup(&lfsr), 11);
+//!
+//!     for _ in 11..65534 {
+//!         lfsr.inc();
+//!     }
+//!     assert_eq!(galois16_direct_lookup(&lfsr), 65534);
+//!
+//!     // wrap around
+//!     lfsr.inc();
+//!     assert_eq!(galois16_direct_lookup(&lfsr), 0);
 //! }
 //! ```
 
 pub use lfsr_base::*;
 pub use lfsr_instances::*;
 pub use lfsr_macro_generate::galois_lfsr;
-pub use lfsr_macro_lookup::lfsr_lookup;
+pub use lfsr_macro_lookup::{direct_lfsr_lookup, searching_lfsr_lookup};
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    lfsr_lookup!(galois32_lookup, galois::Galois32, 10, 20, 5);
+    searching_lfsr_lookup!(galois32_lookup, galois::Galois32, 10, 20, 5);
+    direct_lfsr_lookup!(galois16_direct_lookup, galois::Galois16);
 
     #[test]
     fn lookup_out_of_range() {
@@ -83,6 +111,42 @@ mod tests {
             lfsr.inc();
         }
         assert_eq!(galois32_lookup(&lfsr), Some(19));
+    }
+
+    #[test]
+    fn lookup_direct() {
+        let mut lfsr = galois::Galois16::default();
+
+        assert_eq!(galois16_direct_lookup(&lfsr), 0);
+
+        for _ in 0..10 {
+            lfsr.inc();
+        }
+        assert_eq!(galois16_direct_lookup(&lfsr), 10);
+
+        for _ in 10..11 {
+            lfsr.inc();
+        }
+        assert_eq!(galois16_direct_lookup(&lfsr), 11);
+
+        for _ in 11..15 {
+            lfsr.inc();
+        }
+        assert_eq!(galois16_direct_lookup(&lfsr), 15);
+
+        for _ in 15..19 {
+            lfsr.inc();
+        }
+        assert_eq!(galois16_direct_lookup(&lfsr), 19);
+
+        for _ in 19..65534 {
+            lfsr.inc();
+        }
+        assert_eq!(galois16_direct_lookup(&lfsr), 65534);
+
+        // wrap around
+        lfsr.inc();
+        assert_eq!(galois16_direct_lookup(&lfsr), 0);
     }
 
     #[test]

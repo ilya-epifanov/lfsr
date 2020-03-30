@@ -8,6 +8,8 @@ pub trait LFSR {
     fn inc(&mut self);
     /** Count down */
     fn dec(&mut self);
+    /** Sequence length of this LFSR */
+    fn sequence_length(&self) -> u32;
 }
 
 /// A non-object-safe part of an LFSR

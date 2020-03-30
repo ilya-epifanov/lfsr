@@ -14,7 +14,7 @@ use syn::IntSuffix;
 use syn::Token;
 
 #[derive(Debug)]
-struct LFSRLookupInput {
+struct SearchingLFSRLookupInput {
     name: String,
     lfsr_ty: syn::TypePath,
     min_value: u32,
@@ -22,7 +22,7 @@ struct LFSRLookupInput {
     step: u32,
 }
 
-impl Parse for LFSRLookupInput {
+impl Parse for SearchingLFSRLookupInput {
     fn parse(input: ParseStream<'_>) -> syn::Result<Self> {
         let name = input.parse::<syn::Ident>()?.to_string();
         input.parse::<Token![,]>()?;
@@ -49,8 +49,8 @@ impl Parse for LFSRLookupInput {
 }
 
 #[proc_macro]
-pub fn lfsr_lookup(input: TokenStream) -> TokenStream {
-    let input: LFSRLookupInput = parse_macro_input!(input as LFSRLookupInput);
+pub fn searching_lfsr_lookup(input: TokenStream) -> TokenStream {
+    let input: SearchingLFSRLookupInput = parse_macro_input!(input as SearchingLFSRLookupInput);
     let name = syn::Ident::new(&input.name, Span::call_site());
     let lfsr_ident = &input.lfsr_ty;
 
@@ -162,4 +162,131 @@ pub fn lfsr_lookup(input: TokenStream) -> TokenStream {
     };
 
     TokenStream::from(expanded)
+}
+
+#[derive(Debug)]
+struct DirectLFSRLookupInput {
+    name: String,
+    lfsr_ty: syn::TypePath,
+}
+
+impl Parse for DirectLFSRLookupInput {
+    fn parse(input: ParseStream<'_>) -> syn::Result<Self> {
+        let name = input.parse::<syn::Ident>()?.to_string();
+        input.parse::<Token![,]>()?;
+
+        let lfsr_ty = input.parse::<syn::TypePath>()?;
+
+        Ok(Self {
+            name,
+            lfsr_ty,
+        })
+    }
+}
+
+#[proc_macro]
+pub fn direct_lfsr_lookup(input: TokenStream) -> TokenStream {
+    let input: DirectLFSRLookupInput = parse_macro_input!(input as DirectLFSRLookupInput);
+    let name = syn::Ident::new(&input.name, Span::call_site());
+    let lfsr_ident = &input.lfsr_ty;
+
+    let _tests_mod_name = syn::Ident::new(
+        format!("tests_{}", &input.name.to_lowercase()).as_str(),
+        Span::call_site(),
+    );
+
+    let mut lfsr: Box<dyn LFSR> = {
+        match lfsr_ident
+            .path
+            .segments
+            .last()
+            .unwrap()
+            .value()
+            .ident
+            .to_string()
+            .as_str()
+        {
+            "Galois32" => Box::new(lfsr_instances::galois::Galois32::default()),
+            "Galois31" => Box::new(lfsr_instances::galois::Galois31::default()),
+            "Galois30" => Box::new(lfsr_instances::galois::Galois30::default()),
+            "Galois29" => Box::new(lfsr_instances::galois::Galois29::default()),
+            "Galois28" => Box::new(lfsr_instances::galois::Galois28::default()),
+            "Galois27" => Box::new(lfsr_instances::galois::Galois27::default()),
+            "Galois26" => Box::new(lfsr_instances::galois::Galois26::default()),
+            "Galois25" => Box::new(lfsr_instances::galois::Galois25::default()),
+            "Galois24" => Box::new(lfsr_instances::galois::Galois24::default()),
+            "Galois23" => Box::new(lfsr_instances::galois::Galois23::default()),
+            "Galois22" => Box::new(lfsr_instances::galois::Galois22::default()),
+            "Galois21" => Box::new(lfsr_instances::galois::Galois21::default()),
+            "Galois20" => Box::new(lfsr_instances::galois::Galois20::default()),
+            "Galois19" => Box::new(lfsr_instances::galois::Galois19::default()),
+            "Galois18" => Box::new(lfsr_instances::galois::Galois18::default()),
+            "Galois17" => Box::new(lfsr_instances::galois::Galois17::default()),
+            "Galois16" => Box::new(lfsr_instances::galois::Galois16::default()),
+            "Galois15" => Box::new(lfsr_instances::galois::Galois15::default()),
+            "Galois14" => Box::new(lfsr_instances::galois::Galois14::default()),
+            "Galois13" => Box::new(lfsr_instances::galois::Galois13::default()),
+            "Galois12" => Box::new(lfsr_instances::galois::Galois12::default()),
+            "Galois11" => Box::new(lfsr_instances::galois::Galois11::default()),
+            "Galois10" => Box::new(lfsr_instances::galois::Galois10::default()),
+            "Galois9" => Box::new(lfsr_instances::galois::Galois9::default()),
+            "Galois8" => Box::new(lfsr_instances::galois::Galois8::default()),
+            "Galois7" => Box::new(lfsr_instances::galois::Galois7::default()),
+            "Galois6" => Box::new(lfsr_instances::galois::Galois6::default()),
+            "Galois5" => Box::new(lfsr_instances::galois::Galois5::default()),
+            "Galois4" => Box::new(lfsr_instances::galois::Galois4::default()),
+            "Galois3" => Box::new(lfsr_instances::galois::Galois3::default()),
+            "Galois2" => Box::new(lfsr_instances::galois::Galois2::default()),
+            _ => panic!(),
+        }
+    };
+
+    let lfsr_initial_state = lfsr.get_state();
+
+    let mut counter = 0;
+    let mut lfsr_states = Vec::new();
+    while counter < lfsr.sequence_length() {
+        if counter != 0 {
+            assert_ne!(lfsr.get_state(), lfsr_initial_state);
+        }
+        lfsr_states.push(lfsr.get_state());
+        lfsr.inc();
+        counter += 1;
+    }
+
+    let mut reverse_lfsr_states = Vec::with_capacity(lfsr_states.len());
+    reverse_lfsr_states.resize_with(lfsr_states.len() + 1, || 0);
+
+    for (ix, lfsr_state) in lfsr_states.iter().copied().enumerate() {
+        reverse_lfsr_states[lfsr_state as usize] = ix;
+    }
+
+    let steps = lfsr_states.len() + 1;
+
+    let lookup_table = {
+        let mut s = quote! {};
+        for original_value in reverse_lfsr_states.iter().cloned() {
+            let original_value = syn::LitInt::new(original_value as u64, IntSuffix::U32, Span::call_site());
+            s.append_all(quote! {
+                #original_value,
+            });
+        }
+        Group::new(Delimiter::Bracket, s)
+    };
+
+    let expanded = quote! {
+        fn #name(lfsr: &#lfsr_ident) -> u32 {
+            const LOOKUP: [u32; #steps as usize] = #lookup_table;
+
+            LOOKUP[lfsr.state as usize]
+        }
+    };
+
+    TokenStream::from(expanded)
+}
+
+#[deprecated(since="0.3.0", note="use searching_lfsr_lookup!(..) instead; or use direct_lfsr_lookup!(..) for small LUTs")]
+#[proc_macro]
+pub fn lfsr_lookup(input: TokenStream) -> TokenStream {
+    searching_lfsr_lookup(input)
 }

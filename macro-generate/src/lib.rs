@@ -19,8 +19,8 @@ fn galois_mask(taps: &[u32]) -> u32 {
     ret
 }
 
-fn galois_inverse_mask(forward_mark: u32, width: u32) -> u32 {
-    (forward_mark << 1) | ((forward_mark >> (width - 1)) & 1)
+fn galois_inverse_mask(forward_mask: u32, width: u32) -> u32 {
+    (forward_mask << 1) | ((forward_mask >> (width - 1)) & 1)
 }
 
 #[derive(Debug)]
@@ -156,6 +156,10 @@ pub fn galois_lfsr(input: TokenStream) -> TokenStream {
 
                     fn dec(&mut self) {
                         self.state = Self::down(self.state);
+                    }
+
+                    fn sequence_length(&self) -> u32 {
+                        Self::sequence_length()
                     }
                 }
 
